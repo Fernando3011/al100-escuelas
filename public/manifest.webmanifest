@@ -1,0 +1,15 @@
+{
+  "name": "al100 Escuelas · por treselefantes",
+  "short_name": "al100 Escuelas",
+  "description": "Bienestar emocional para tutorías escolares, alumnos y familias.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F7F2",
+  "theme_color": "#1D6F62",
+  "lang": "es-MX",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "name": "al100-escuelas",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "al100 Escuelas · por treselefantes — bienestar emocional para tutorías escolares, alumnos y familias.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "sql": "node scripts/generar-sql.mjs"
+  },
+  "dependencies": {
+    "@fontsource/nunito": "^5.0.0",
+    "@supabase/supabase-js": "^2.45.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.0"
+  }
+}
