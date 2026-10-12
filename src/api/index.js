@@ -2,8 +2,9 @@
 import { crearBackendSupabase } from './supabase.js';
 import { crearBackendDemo } from './demo.js';
 
-const url = import.meta.env.VITE_SUPABASE_URL;
-const llave = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Acepta la URL aunque se copie con "/rest/v1/" al final o con espacios.
+const url = (import.meta.env.VITE_SUPABASE_URL ?? '').trim().replace(/\/rest\/v1\/?$/, '').replace(/\/+$/, '');
+const llave = (import.meta.env.VITE_SUPABASE_ANON_KEY ?? '').trim();
 
 export const api = url && llave ? crearBackendSupabase(url, llave) : crearBackendDemo();
 export const esDemo = api.modo === 'demo';
