@@ -37,7 +37,16 @@ export function FormCodigo({ etiqueta, boton, accion, alTerminar, ayuda }) {
 }
 
 export const UnirseGrupo = ({ alUnirse }) => (
-  <FormCodigo etiqueta="Código de grupo" boton="Unirme" accion={(c) => api.unirseGrupo(c)} alTerminar={alUnirse} />
+  <FormCodigo etiqueta="Código de grupo" boton="Unirme" alTerminar={alUnirse}
+    ayuda="Tiene 6 letras y números. Te lo da tu tutor/a."
+    accion={async (c) => {
+      try {
+        return await api.unirseGrupo(c);
+      } catch (e) {
+        if (c.trim().length === 8) throw new Error('Ese parece el código del personal de la escuela. Pídele a tu tutor/a el código de tu grupo (6 caracteres).');
+        throw e;
+      }
+    }} />
 );
 
 export const VincularHijo = ({ alVincular }) => (
