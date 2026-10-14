@@ -546,6 +546,28 @@ language sql stable security definer set search_path = public as $$
   order by p.nombre
 $$;
 
+-- Para la familia: lo que su hijo/a aprendió en los últimos 7 días.
+-- Solo lecciones e idea clave; nunca ánimo, respuestas ni bitácora.
+create or replace function public.aprendizaje_hijo(a uuid)
+returns table (leccion_id uuid, titulo text, tema text, color text, idea_titulo text, idea_texto text, fecha date)
+language plpgsql stable security definer set search_path = public as $$
+begin
+  if not exists (select 1 from vinculos_familia v where v.alumno_id = a and v.familiar_id = auth.uid()) then return; end if;
+  return query
+    select l.id, l.titulo, t.nombre, t.color,
+           (select e.p ->> 'titulo' from jsonb_array_elements(l.pasos) with ordinality e(p, n)
+             where e.p ->> 'tipo' = 'idea' order by e.n limit 1),
+           (select e.p ->> 'texto' from jsonb_array_elements(l.pasos) with ordinality e(p, n)
+             where e.p ->> 'tipo' = 'idea' order by e.n limit 1),
+           max(lc.fecha)
+    from lecciones_completadas lc
+    join lecciones l on l.id = lc.leccion_id
+    join temas t on t.id = l.tema_id
+    where lc.alumno_id = a and lc.fecha > hoy() - 7
+    group by l.id, t.id
+    order by max(lc.fecha) desc;
+end $$;
+
 -- Para el alumno: su grupo, tema actual y rachas.
 create or replace function public.mi_resumen() returns json
 language plpgsql stable security definer set search_path = public as $$

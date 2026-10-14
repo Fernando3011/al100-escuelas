@@ -154,6 +154,7 @@ export function crearBackendSupabase(url, llave) {
 
     // ---------- Familia ----------
     infoHijos: () => rpc('info_hijos'),
+    aprendizajeHijo: (alumnoId) => rpc('aprendizaje_hijo', { a: alumnoId }),
     rachaFamilia: () => rpc('racha_familia'),
     async platicamosHoy() {
       const filas = revisar(await sb.from('conversaciones_familia').select('fecha').eq('fecha', hoy()));

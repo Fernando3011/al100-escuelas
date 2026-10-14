@@ -255,6 +255,18 @@ export function crearBackendDemo() {
         return { alumno_id: a.id, nombre: a.nombre, grupo: g?.nombre ?? null, tema_id: t?.id ?? null, tema: t?.nombre_familia ?? null, racha: rachaAlumno(a.id) };
       });
     },
+    async aprendizajeHijo(a) {
+      if (!d.vinculos.some((v) => v.familiar_id === d.sesion && v.alumno_id === a)) return [];
+      const recientes = d.hechas.filter((x) => x.alumno_id === a && x.fecha > desde(7));
+      const porLeccion = new Map();
+      recientes.forEach((x) => { if (!porLeccion.has(x.leccion_id) || porLeccion.get(x.leccion_id) < x.fecha) porLeccion.set(x.leccion_id, x.fecha); });
+      return [...porLeccion.entries()].map(([id, fecha]) => {
+        const l = d.lecciones.find((y) => y.id === id);
+        const t = d.temas.find((y) => y.id === l?.tema_id);
+        const idea = l?.pasos.find((p) => p.tipo === 'idea');
+        return l && { leccion_id: id, titulo: l.titulo, tema: t.nombre, color: t.color, idea_titulo: idea?.titulo ?? null, idea_texto: idea?.texto ?? null, fecha };
+      }).filter(Boolean).sort((x, y) => (x.fecha < y.fecha ? 1 : -1));
+    },
     async rachaFamilia() { return racha((f) => d.platicas.some((p) => p.familiar_id === d.sesion && p.fecha === f)); },
     async platicamosHoy() { return d.platicas.some((p) => p.familiar_id === d.sesion && p.fecha === hoy()); },
     async marcarPlatica() { if (!(await api.platicamosHoy())) d.platicas.push({ familiar_id: d.sesion, fecha: hoy() }); guardar(); },

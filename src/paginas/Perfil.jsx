@@ -94,7 +94,7 @@ export default function Perfil() {
         <>
           <div className="tarjeta">
             <span className="etiqueta">Código familiar</span>
-            <p>Compártelo con tu mamá o papá para que vean qué temas trabajas en clase y tu racha. <b>Nunca verán tu ánimo ni tu bitácora.</b></p>
+            <p>Compártelo con tu mamá o papá para que vean qué temas trabajas en clase, qué lecciones completas y tu racha. <b>Nunca verán tu ánimo ni tu bitácora.</b></p>
             <span className="codigo" style={{ alignSelf: 'flex-start' }}>{perfil.codigo_familia}</span>
           </div>
           <div className="tarjeta">

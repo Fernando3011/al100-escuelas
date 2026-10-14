@@ -17,7 +17,7 @@ export default function Privacidad() {
         <ul style={{ margin: 0, paddingLeft: 20 }}>
           <li><b>Tu bitácora solo la lees tú.</b> Nadie más: ni tu tutor, ni psicología, ni tu familia.</li>
           <li>Tu tutor/a ve el ánimo de su grupo <b>en conjunto y de forma anónima</b> (solo si hay 3 o más alumnos), las rachas y el avance. No ve tu ánimo individual.</li>
-          <li>Tu familia ve qué tema se trabaja en clase y tu racha. No ve tu ánimo ni tu bitácora.</li>
+          <li>Tu familia ve qué tema se trabaja en clase, tu racha y las lecciones que completas con su idea principal. No ve tu ánimo, tus respuestas ni tu bitácora.</li>
           <li>Si marcas “Bajo” o “Mal” varios días seguidos, o pides hablar con alguien, el personal que tu escuela haya definido recibe un aviso para acercarse contigo.</li>
         </ul>
         <h2>Menores de edad</h2>

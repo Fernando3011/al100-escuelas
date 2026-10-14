@@ -24,11 +24,45 @@ export function ConsejoTarjeta({ consejo }) {
   );
 }
 
+const recortar = (t, n = 150) => (t && t.length > n ? t.slice(0, n).replace(/\s+\S*$/, '') + '…' : t);
+
+// Lo que el alumno aprendió en los últimos 7 días: lecciones e idea clave.
+// Nunca muestra ánimo, respuestas ni bitácora.
+function LoQueAprendio({ hijo }) {
+  const lista = hijo.aprendio ?? [];
+  const nombre = hijo.nombre.split(' ')[0];
+  return (
+    <div className="pila" style={{ borderTop: '1px solid var(--borde)', paddingTop: 12 }}>
+      <div className="fila entre">
+        <span className="etiqueta">Lo que aprendió esta semana</span>
+        <span className="pildora">{lista.length} {lista.length === 1 ? 'lección' : 'lecciones'}</span>
+      </div>
+      {lista.length === 0 ? (
+        <p className="tenue chico">{nombre} todavía no completa lecciones esta semana. Cuando lo haga, aquí verás la idea clave de cada una.</p>
+      ) : (
+        <>
+          {lista.map((l) => (
+            <div key={l.leccion_id} style={{ borderLeft: `4px solid ${l.color}`, paddingLeft: 12 }} className="pila-chica">
+              <span className="chico" style={{ fontWeight: 800, color: l.color }}>{l.tema} · {l.titulo}</span>
+              {l.idea_titulo && <span style={{ fontWeight: 800 }}>{l.idea_titulo}</span>}
+              {l.idea_texto && <span className="tenue chico">{recortar(l.idea_texto)}</span>}
+            </div>
+          ))}
+          <div className="aviso info chico">
+            <b>Para platicarlo:</b> “Vi que aprendiste sobre {lista[0].titulo.toLowerCase()}. ¿Me cuentas qué fue lo que más te sirvió?”
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function InicioFamilia() {
   const { perfil } = useSesion();
   const marcar = useAccion();
   const datos = useDatos(async () => {
-    const [hijos, racha, platicamos, temas] = await Promise.all([api.infoHijos(), api.rachaFamilia(), api.platicamosHoy(), api.temas()]);
+    const [hijosBase, racha, platicamos, temas] = await Promise.all([api.infoHijos(), api.rachaFamilia(), api.platicamosHoy(), api.temas()]);
+    const hijos = await Promise.all(hijosBase.map(async (h) => ({ ...h, aprendio: await api.aprendizajeHijo(h.alumno_id) })));
     const temaId = hijos.find((h) => h.tema_id)?.tema_id ?? temas[diaDelAno() % temas.length].id;
     const consejos = await api.consejos(temaId);
     const tema = temas.find((t) => t.id === temaId);
@@ -82,6 +116,7 @@ export default function InicioFamilia() {
             </div>
           </div>
           <div className="fila chico tenue"><Icono.Fuego width={18} height={18} style={{ color: 'var(--naranja)' }} /> Racha de {h.nombre.split(' ')[0]}: <b style={{ color: 'var(--naranja-texto)' }}>{dias(h.racha)}</b></div>
+          <LoQueAprendio hijo={h} />
         </div>
       ))}
 
